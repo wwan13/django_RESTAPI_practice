@@ -4,6 +4,11 @@
 - framework: django, djangorestframework
 - language: python
 
+
+설치
+- $pip install django
+- $pip install djangorestframework
+
 <br><br>
 
 ## ***API VIEWS***
