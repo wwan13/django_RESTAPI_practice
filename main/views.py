@@ -112,6 +112,7 @@ class PostDetail(mixins.RetrieveModelMixin,
         return self.destroy(request, *args, **kwargs)
 """
 
+"""
 # GENERIC CBV
 from .serializer import PostSerializer
 from .models import Post
@@ -124,3 +125,26 @@ class PostList(generics.ListCreateAPIView):
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+"""
+
+# VIEW SET
+
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
+class SnippetViewSet(viewsets.ModelViewSet):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
+    permission_classes = [
+        permission.IsAuthenticatedOrReadOnly,
+        IsOwnerOrReadOnly,
+    ]
+
+    @action(detail=True, renderer_classes=[renderers.StaticHTMLRenderer])
+    def highlight(self, request, *args, **kwargs):
+        snippet = self.get_object()
+        return Response(snippet.highlighted)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)

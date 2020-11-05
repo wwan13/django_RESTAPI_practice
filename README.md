@@ -14,7 +14,24 @@
 
 urls.py
 
+~~~python
+# router
+
+from django.urls import path,include
+from rest_framework.routers import DefaultRouter
+from . import views
+
+router = DefaultRouter()
+router.register = ('post',views.PostViewSet)
+
+urlpatterns = [
+    path('',include(router.urls)),
+]
+~~~
+
 ~~~pyhton
+# without router
+
 from django.urls import path, include
 from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
@@ -33,6 +50,8 @@ urlpatterns = format_suffix_patterns(urlpatterns)
 
 views.py
 ~~~python
+# API VIEWS
+
 from .models import Post
 from .serializer import PostSerializer
 from django.http import Http404
@@ -96,7 +115,8 @@ class PostDetail(APIView):
 views.py
 
 ~~~python
-# mixin
+# MIXIN
+
 from .models import Post
 from .serializer import PostSerializer
 from rest_framework import generics
@@ -144,6 +164,7 @@ class PostDetail(mixins.RetrieveModelMixin,
 views.py
 ~~~python
 # GENERIC CBV
+
 from .serializer import PostSerializer
 from .models import Post
 from rest_framework import generics
@@ -156,3 +177,40 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 ~~~
+
+<br>
+
+# ***VIEWSET***
+
+~~~python
+# VIEW SET
+
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
+class SnippetViewSet(viewsets.ModelViewSet):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
+    permission_classes = [
+        permission.IsAuthenticatedOrReadOnly,
+        IsOwnerOrReadOnly,
+    ]
+
+    @action(detail=True, renderer_classes=[renderers.StaticHTMLRenderer])
+    def highlight(self, request, *args, **kwargs):
+        snippet = self.get_object()
+        return Response(snippet.highlighted)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+~~~
+
+### action decorator
+- 커스텀 views 를 작성할 때 사용
+- @action(method=['POST or GET ...'], detail=none, renderer_classes=[#])
+    - renderer.JSONRenderer (default)
+    - renderer.BrowsableAPIRenderer (default)
+    - renderer.StaticHTMLRenderer
+    - TemplateHTMLRenderer
+    - ...
