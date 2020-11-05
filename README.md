@@ -27,6 +27,8 @@ urlpatterns = [
 urlpatterns = format_suffix_patterns(urlpatterns)
 ~~~
 
+<br>
+
 ## ***API VIEWS***
 
 views.py
@@ -87,6 +89,7 @@ class PostDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 ~~~
 
+<br>
 
 ## ***MIXIN***
 
@@ -134,3 +137,22 @@ class PostDetail(mixins.RetrieveModelMixin,
         return self.destroy(request, *args, **kwargs)
 ~~~
 
+<br>
+
+## ***GENERIC CBC***
+
+views.py
+~~~python
+# GENERIC CBV
+from .serializer import PostSerializer
+from .models import Post
+from rest_framework import generics
+
+class PostList(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+class PostDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+~~~
