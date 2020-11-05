@@ -70,7 +70,8 @@ class PostDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 """
 
-# mixin
+"""
+# MIXIN
 from .models import Post
 from .serializer import PostSerializer
 from rest_framework import generics
@@ -109,3 +110,17 @@ class PostDetail(mixins.RetrieveModelMixin,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+"""
+
+# GENERIC CBV
+from .serializer import PostSerializer
+from .models import Post
+from rest_framework import generics
+
+class PostList(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+class PostDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
