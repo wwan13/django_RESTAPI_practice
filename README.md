@@ -6,7 +6,7 @@
 
 <br>
 
-### 설치
+### install
 - $pip install django
 - $pip install djangorestframework
 
