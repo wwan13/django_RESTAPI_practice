@@ -4,6 +4,12 @@
 - framework: django, djangorestframework
 - language: python
 
+<br>
+
+### install
+- $pip install django
+- $pip install djangorestframework
+
 <br><br>
 
 urls.py
