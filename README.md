@@ -7,7 +7,6 @@
 <br><br>
 
 ## ***API VIEWS***
-<hr>
 
 views.py
 ~~~python
@@ -85,7 +84,6 @@ urlpatterns = format_suffix_patterns(urlpatterns)
 <br>
 
 ## ***MIXIN***
-<hr>
 
 views.py
 
