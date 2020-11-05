@@ -1,19 +1,7 @@
-"""
-from django.shortcuts import render
-from rest_framework import viewsets
-from . import models
-from .serializer import PostSerializer
+# API VIEWS
 
-# Create your views here.
-
-
-class PostViewSet(viewsets.ModelViewSet):
-    queryset = models.Post.objects.all()
-    serializer_class = PostSerializer
-"""
-
-"""
-# API VIEW
+views.py
+~~~python
 from .models import Post
 from .serializer import PostSerializer
 from django.http import Http404
@@ -68,8 +56,30 @@ class PostDetail(APIView):
         post.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
-"""
+~~~
 
+urls.py
+
+~~~pyhton
+from django.urls import path, include
+from rest_framework.urlpatterns import format_suffix_patterns
+from . import views
+
+urlpatterns = [
+    path("post", views.PostList.as_view()),
+    path("post/<int:pk>", views.PostDetail.as_view()),
+]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
+~~~
+
+<br>
+
+# MIXIN
+
+views.py
+
+~~~python
 # mixin
 from .models import Post
 from .serializer import PostSerializer
@@ -109,3 +119,19 @@ class PostDetail(mixins.RetrieveModelMixin,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+~~~
+
+urls.py
+~~~python
+# mixin
+from django.urls import path
+from rest_framework.urlpatterns import format_suffix_patterns
+from . import views
+
+urlpatterns = [
+    path("post", views.PostList.as_view()),
+    path("post/<int:pk>", views.PostDetail.as_view()),
+]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
+~~~
