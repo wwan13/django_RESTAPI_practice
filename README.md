@@ -159,7 +159,7 @@ class PostDetail(mixins.RetrieveModelMixin,
 
 <br>
 
-## ***GENERIC CBC***
+## ***GENERIC CBV***
 
 views.py
 ~~~python
@@ -180,7 +180,7 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
 
 <br>
 
-# ***VIEWSET***
+## ***VIEWSET***
 
 ~~~python
 # VIEW SET
