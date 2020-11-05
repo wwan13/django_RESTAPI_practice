@@ -6,8 +6,22 @@
 
 <br><br>
 
+urls.py
+
+~~~pyhton
+from django.urls import path, include
+from rest_framework.urlpatterns import format_suffix_patterns
+from . import views
+
+urlpatterns = [
+    path("post", views.PostList.as_view()),
+    path("post/<int:pk>", views.PostDetail.as_view()),
+]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
+~~~
+
 ## ***API VIEWS***
-<hr>
 
 views.py
 ~~~python
@@ -67,25 +81,8 @@ class PostDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 ~~~
 
-urls.py
-
-~~~pyhton
-from django.urls import path, include
-from rest_framework.urlpatterns import format_suffix_patterns
-from . import views
-
-urlpatterns = [
-    path("post", views.PostList.as_view()),
-    path("post/<int:pk>", views.PostDetail.as_view()),
-]
-
-urlpatterns = format_suffix_patterns(urlpatterns)
-~~~
-
-<br>
 
 ## ***MIXIN***
-<hr>
 
 views.py
 
@@ -131,17 +128,3 @@ class PostDetail(mixins.RetrieveModelMixin,
         return self.destroy(request, *args, **kwargs)
 ~~~
 
-urls.py
-~~~python
-# mixin
-from django.urls import path
-from rest_framework.urlpatterns import format_suffix_patterns
-from . import views
-
-urlpatterns = [
-    path("post", views.PostList.as_view()),
-    path("post/<int:pk>", views.PostDetail.as_view()),
-]
-
-urlpatterns = format_suffix_patterns(urlpatterns)
-~~~
