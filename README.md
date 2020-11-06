@@ -216,3 +216,73 @@ class PostViewSet(viewsets.ModelViewSet):
     - renderer.StaticHTMLRenderer
     - TemplateHTMLRenderer
     - ...
+
+
+## ***PAGINATION***
+
+### pagination 종류
+1. PageNumberPagination (많이씀)
+2. LimitOffsetPagination
+3. CursorPagination
+4. CustomizedPagination (이것도 많이씀)
+
+<br>
+
+### DRF PAGINATION
+
+settings.py
+~~~python
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+}
+~~~
+- 'DEFAULT_PAGINATION_CLASS': '페이지네이션 종류'
+- 'PAGE_SIZE':한번에 표기할 개수
+
+
+유의사항 : 페이지네이션 사용시 반드시 레코드 정렬 필요.
+
+### CUSTON PAGINATION
+
+views.py
+~~~python
+...
+from rest_framework.pagination import PageNumberPagination
+
+class MyPagination(PageNumberPagination):
+    page_size = 6
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all().order_by('id') // 레코드 정렬 
+    serializer_class = PostSerializer
+    pagination_class = MyPagination
+~~~
+
+<br>
+
+이때 페이지네이션을 pagination.py 로 묶어 코드를 정돈 할 수 있음
+
+pagination.py
+~~~python
+from rest_framework.pagination import PageNumberPagination
+
+class MyPagination(PageNumberPagination):
+    page_size = 6
+~~~
+
+views.py
+~~~python
+from .models import Post
+from .serializer import PostSerializer
+from .pagination import MyPagination
+from rest_framework import viewsets
+
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all().order_by('id')
+    serializer_class = PostSerializer
+    pagination_class = 
+~~~
+
+
