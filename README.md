@@ -185,13 +185,15 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
 ~~~python
 # VIEW SET
 
+from .serializer import PostSerializer
+from .models import Post
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-class SnippetViewSet(viewsets.ModelViewSet):
-    queryset = Snippet.objects.all()
-    serializer_class = SnippetSerializer
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
     permission_classes = [
         permission.IsAuthenticatedOrReadOnly,
         IsOwnerOrReadOnly,
@@ -199,7 +201,7 @@ class SnippetViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, renderer_classes=[renderers.StaticHTMLRenderer])
     def highlight(self, request, *args, **kwargs):
-        snippet = self.get_object()
+        post = self.get_object()
         return Response(snippet.highlighted)
 
     def perform_create(self, serializer):

@@ -27,8 +27,10 @@ urlpatterns = [
 ]
 """
 
+"""
 # API VIEWS
 # mixin
+# GENERIC CBV
 from django.urls import path, include
 from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
@@ -39,3 +41,15 @@ urlpatterns = [
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
+"""
+
+from rest_framework.routers import DefaultRouter
+from django.urls import include, path
+from .views import PostViewSet
+
+router = DefaultRouter()
+router.register('', PostViewSet)
+
+urlpatterns = [
+    path('post', include(router.urls))
+]
